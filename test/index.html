@@ -48,12 +48,13 @@
 		<canvas id="canvas"></canvas>
 		<script type="module">
 			import mazeEngine from './engine/mazeengine.js';
+			import Maze from "mazeobject/maze.js";
 			import Scene from "./scene/test1.js";
 			import * as THREE from './three/Three.js';
 			window.THREE = THREE;
 
 			let maze = new mazeEngine();
-			gameCache.game(Scene, maze);
+			gameCache.game(Scene, Maze, maze);
 		</script>
 
 	</body>

@@ -1,7 +1,6 @@
 import MazeObject from "engine/mazeobject.js";
 import * as THREE from "three";
 
-import Maze from "mazeobject/maze.js";
 import Player from "mazeobject/player.js";
 import MazeCamera from "mazeobject/mazecamera.js";
 import MarbleTest from "mazeobject/marbletest.js";
@@ -19,11 +18,6 @@ export default class TestScene1 extends MazeObject {
 		this.name = "Test Scene 1";
 
 		let scene = mazeEngine.scene;
-
-		let width = 8;
-		let height = 8;
-		// Maze must come first
-		mazeEngine.instantiate(Maze, {width: width, height: height});
 
 		// let ambientLight = new THREE.AmbientLight(0xFFFFFF);
 		// ambientLight.intensity = 1;

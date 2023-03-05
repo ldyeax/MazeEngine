@@ -110,16 +110,16 @@ export default class Cell {
 
 	tryGetConnectedCell(x2, y2) {
 		if (x2 == this.x && y2 == this.y + 1) {
-			return this.above;
+				return this.above;
 		}
 		if (x2 == this.x && y2 == this.y - 1) {
-			return this.below;
+				return this.below;
 		}
 		if (x2 == this.x - 1 && y2 == this.y) {
-			return this.leftOf;
+				return this.leftOf;
 		}
 		if (x2 == this.x + 1 && y2 == this.y) {
-			return this.rightOf;
+				return this.rightOf;
 		}
 		return null;
 	}
