@@ -1,0 +1,114 @@
+<!doctype html>
+<meta charset=utf-8>
+
+<title>Marble Test</title>
+
+<script type=importmap>
+{
+    "imports": {
+        "three": "./three/Three.js"
+    }
+}
+</script>
+
+<body>
+
+<canvas width=640 height=480 id=canvas></canvas>
+
+<button id=btn1>Load Original</button>
+<button id=btn2>Load Clone</button>
+
+<script type=module>
+import * as THREE from '../three/Three.js';
+import {
+	GLTFLoader
+} from "../three_examples/jsm/loaders/GLTFLoader.js";
+
+const cloneGltf = (gltf) => {
+    const clone = {
+        animations: gltf.animations,
+        scene: gltf.scene.clone(true)
+    };
+
+    const skinnedMeshes = {};
+
+    gltf.scene.traverse(node => {
+        if (node.isSkinnedMesh) {
+            skinnedMeshes[node.name] = node;
+        }
+    });
+
+    const cloneBones = {};
+    const cloneSkinnedMeshes = {};
+
+    clone.scene.traverse(node => {
+        if (node.isBone) {
+            cloneBones[node.name] = node;
+        }
+
+        if (node.isSkinnedMesh) {
+            cloneSkinnedMeshes[node.name] = node;
+        }
+    });
+
+    for (let name in skinnedMeshes) {
+        const skinnedMesh = skinnedMeshes[name];
+        const skeleton = skinnedMesh.skeleton;
+        const cloneSkinnedMesh = cloneSkinnedMeshes[name];
+
+        const orderedCloneBones = [];
+
+        for (let i = 0; i < skeleton.bones.length; ++i) {
+            const cloneBone = cloneBones[skeleton.bones[i].name];
+            orderedCloneBones.push(cloneBone);
+        }
+
+        cloneSkinnedMesh.bind(
+            new THREE.Skeleton(orderedCloneBones, skeleton.boneInverses),
+            cloneSkinnedMesh.matrixWorld);
+    }
+
+    return clone;
+}
+
+const gltfLoader = new GLTFLoader();
+
+const scene = new THREE.Scene();
+
+const renderer = new THREE.WebGLRenderer({
+    canvas: document.getElementById("canvas"),
+});
+
+const camera = new THREE.PerspectiveCamera(75, 640 / 480, 0.1, 1000);
+scene.add(camera);
+
+const abmient = new THREE.AmbientLight(0xffffff, 1.0);
+scene.add(abmient);
+
+function update() {
+    renderer.render(scene, camera);
+    requestAnimationFrame(update);
+}
+update();
+
+/* ============== */
+
+document.getElementById("btn1").addEventListener("click", () => {
+    gltfLoader.load('../assets/marbletest2.gltf', (gltf) => {
+        let marble1 = gltf.scene;
+        marble1.position.set(-50, -50, -200);
+        marble1.scale.set(3, 3, 3);
+        scene.add(marble1);
+    });
+});
+
+document.getElementById("btn2").addEventListener("click", () => {
+    gltfLoader.load('../assets/marbletest2.gltf', (gltf) => {
+        let marble2 = cloneGltf(gltf).scene;
+        marble2.position.set(50, -50, -200);
+        marble2.scale.set(3, 3, 3);
+        scene.add(marble2);
+    });
+});
+
+</script>

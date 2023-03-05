@@ -1,0 +1,40 @@
+<!doctype html>
+<meta charset=utf-8>
+
+<title>Shader Test</title>
+
+<script type=importmap>
+{
+	"imports": {
+		"three": "../three/Three.js",
+		"shader/": "../engine/shader/"
+	}
+}
+</script>
+
+<body>
+
+<canvas width=640 height=480 id=canvas></canvas>
+
+<script type=module>
+import * as THREE from '../three/Three.js';
+import shaderTest from "../engine/test/shadertest.js";
+
+const scene = new THREE.Scene();
+
+const renderer = new THREE.WebGLRenderer({
+    canvas: document.getElementById("canvas"),
+});
+
+const camera = new THREE.PerspectiveCamera(75, 640 / 480, 0.1, 1000);
+scene.add(camera);
+
+function update() {
+    renderer.render(scene, camera);
+    requestAnimationFrame(update);
+}
+update();
+
+shaderTest(scene);
+
+</script>

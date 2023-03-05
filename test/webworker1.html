@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<script>
+  window.worker = new Worker("./webworker2.js");
+  window.sharedBuffer = new SharedArrayBuffer(1024);
+  window.sharedBufferView = new Uint8Array(sharedBuffer);
+  let oldValue = 10;
+  setInterval(function() {
+    if (sharedBufferView[0] != oldValue) {
+      console.log("oldValue: " + oldValue + " newValue: " + sharedBufferView[0]);
+      oldValue = sharedBufferView[0];
+    }
+  })
+  worker.postMessage(sharedBuffer);
+</script>

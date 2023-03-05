@@ -1,0 +1,23 @@
+{
+    "compilerOptions": {
+        "module": "commonjs",
+        "target": "es6",
+        "paths": {
+            "three": ["./three/Three.js"],
+            "three_examples/*": ["./three_examples/"],
+    
+            "assets/*": ["./assets/"],
+    
+            "engine/*": ["./engine/*"],
+            "asset/*": ["./engine/asset/*"],
+            "mazeobject/*": ["./engine/mazeobject/*"],
+            "mazescript/*": ["./engine/mazescript/*"],
+            "shader/*": ["./engine/shader/*"],
+            "test/*": ["./engine/test/*"]
+        }
+    },
+    "module": "es6",
+    "useForJsConfigJSON": true,
+    "checkJs": true,
+    "baseUrl": ".",
+}
