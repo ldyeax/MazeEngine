@@ -1,62 +1,34 @@
 <!doctype html>
-<html lang="en">
 
-	<head>
+<meta charset="utf-8">
+<title>Maze</title>
 
-		<meta charset="utf-8">
-		<title>Maze</title>
-		<script src="./js/game/utils.js"></script>
-		<script src="./js/moment-with-locales.js"></script>
-		<script src="./js/moment-timezone-with-data.js"></script>
-		<script src="./js/clone.js"></script>
-		<script src="./js/jquery-3.6.3.min.js"></script>
-		<script src="./js/loadingoverlay.min.js"></script>
-		<script src="./js/bootstrap.bundle.min.js"></script>
-		<script src="./js/tinyLib2.js"></script>
-		<script src="./js/game/socket.js"></script>
-		<script src="./js/game/base.js"></script>
+<script type=importmap>
+{
+	"imports": {
+		"three": "../three/Three.js",
+		"three_examples/": "../three_examples/",
 
-		<script type=importmap>
-		{
-			"imports": {
-				"three": "./three/Three.js",
-				"three_examples/": "./three_examples/",
+		"assets/": "../assets/",
 
-				"assets/": "./assets/",
+		"engine/": "../engine/",
+		"asset/": "../engine/asset/",
+		"mazeobject/": "../engine/mazeobject/",
+		"mazescript/": "../engine/mazescript/",
+		"shader/": "../engine/shader/",
+		"test/": "../engine/test/"
+	}
+}
+</script>
+<body>
+<canvas id="canvas"></canvas>
+<script type="module">
+	import mazeEngine from "engine/mazeengine.js";
+	import Maze from "mazeobject/maze.js";
+	import Scene from "scene/singleplayertest1.js";
+	import * as THREE from '../three/Three.js';
+	window.THREE = THREE;
 
-				"engine/": "./engine/",
-				"asset/": "./engine/asset/",
-				"mazeobject/": "./engine/mazeobject/",
-				"mazescript/": "./engine/mazescript/",
-				"shader/": "./engine/shader/",
-				"test/": "./engine/test/"
-			}
-		}
-		</script>
-
-		<link rel="preload" href="./css/bootstrap.min.css" as="style">
-		<link rel="preload" href="./css/dark.css" as="style">
-		<link rel="preload" href="./css/game/base.css" as="style">
-		<link rel="stylesheet" href="./css/bootstrap.min.css">
-		<link rel="stylesheet" href="./css/dark.css">
-		<link rel="stylesheet" href="./css/game/base.css">
-
-	</head>
-
-	<body>
-			
-		<canvas id="canvas"></canvas>
-		<script type="module">
-			import mazeEngine from './engine/mazeengine.js';
-			import Maze from "mazeobject/maze.js";
-			import Scene from "./scene/test1.js";
-			import * as THREE from './three/Three.js';
-			window.THREE = THREE;
-
-			let maze = new mazeEngine();
-			gameCache.game(Scene, Maze, maze);
-		</script>
-
-	</body>
-
-</html>
+	let maze = new mazeEngine();
+	gameCache.game(Scene, Maze, maze);
+</script>
