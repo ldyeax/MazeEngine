@@ -215,8 +215,6 @@ export default function generateMaze(width, height, seed) {
 		}
 	}
 
-	console.log(mazeAsciiArt(ret));
-
 	for (let y = 0; y < height; y++) {
 		for (let x = 0; x < width; x++) {
 			if (!ret[y][x].up) {
@@ -234,5 +232,5 @@ export default function generateMaze(width, height, seed) {
 		}
 	}
 
-	return {ret, seed: seedGenerator };
+	return {ret, seed: seedGenerator, asciiArt: mazeAsciiArt(ret) };
 };
