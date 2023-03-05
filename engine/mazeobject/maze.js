@@ -19,7 +19,7 @@ export default class Maze extends MazeObject {
 		mazeEngine.cells = this.cells = mazeData.ret;
 		if (seed) {
 			mazeEngine.seed = this.seed = mazeData.seed;
-			mazeEngine.mapData = this.mapData = { width, height, asciiArt: mazeData.asciiArt };
+			mazeEngine.asciiArt = this.asciiArt = mazeData.asciiArt;
 		}
 
 		mazeEngine.ceilingMazeObject = this.ceilingMazeObject = mazeEngine.instantiate(Ceiling);
