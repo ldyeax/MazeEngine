@@ -25,10 +25,10 @@
 <script type="module">
 	import mazeEngine from "engine/mazeengine.js";
 	import Maze from "mazeobject/maze.js";
-	import Scene from "scene/singleplayertest1.js";
+	import TestScene from "scene/singleplayertest1.js";
 	import * as THREE from '../three/Three.js';
 	window.THREE = THREE;
 
 	let maze = new mazeEngine();
-	gameCache.game(Scene, Maze, maze);
+	maze.instantiate(TestScene);
 </script>
