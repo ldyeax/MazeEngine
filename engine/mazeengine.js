@@ -32,6 +32,25 @@ let noclip = window.location.search.indexOf("noclip") != -1;
  */
 export default class MazeEngine {
 	/**
+	 * @type {string}
+	 */
+	pathRoot = ".";
+	/**
+	 * @param {string} path Path relative to pathRoot
+	 * @returns relative path resolved to absolute path with pathRoot
+	 */
+	resolvePath(path) {
+		let ret = this.pathRoot;
+		if (ret.length > 0 && ret[ret.length - 1] != '/') {
+			if (path.length > 0 && path[0] != '/') {
+				ret += '/';
+			}
+		}
+		ret += path;
+		return ret;
+	}
+
+	/**
 	 * @type {number}
 	 */
 	SIDE = 0;
@@ -102,7 +121,11 @@ export default class MazeEngine {
 	// #endregion
 	
 	// #region constructor
-	constructor() {
+	constructor(options) {
+		if (options.pathRoot) {
+			this.pathRoot = options.pathRoot;
+		}
+
 		this.SIDE = SIDE;
 		this.HALF_SIDE = HALF_SIDE;
 		this.INV_SIDE = INV_SIDE;

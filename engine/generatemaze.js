@@ -178,7 +178,7 @@ export default function generateMaze(width, height, seed) {
 			countGenerator++;
 			let direction;
 
-			if(Array.isArray(seed)) {
+			if (seed && Array.isArray(seed)) {
 				direction = seed[countGenerator];
 			} else {
 				direction = Math.floor(Math.random() * 4);

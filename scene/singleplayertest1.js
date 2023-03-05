@@ -9,11 +9,17 @@ import CellLightSource from "engine/mazescript/celllightsource.js";
 
 import marbleTest from "engine/test/marbletest.js";
 
+import Maze from "mazeobject/maze.js";
+
 export default class SinglePlayerTestScene1 extends MazeObject {
 	constructor(mazeEngine, args) {
 		super(mazeEngine, args);
 
 		this.name = "Single Player Test Scene 1";
+
+        let width = 8;
+        let height = 8;
+        mazeEngine.instantiate(Maze, {width:width, height:height});
 
 		mazeEngine.instantiate(CellLightManager);
 

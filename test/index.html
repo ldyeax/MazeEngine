@@ -3,33 +3,49 @@
 <meta charset="utf-8">
 <title>Maze</title>
 
+<style>
+body, html {
+	margin: 0 0 0 0;
+	padding: 0 0 0 0;
+	background-color: black;
+	overflow: hidden;
+}
+#canvas {
+	width: 100%;
+	height: 100%;
+	margin: 0 0 0 0;
+	padding: 0 0 0 0;
+}
+</style>
+
 <script type=importmap>
 {
 	"imports": {
 		"three": "../three/Three.js",
 		"three_examples/": "../three_examples/",
-
 		"assets/": "../assets/",
-
 		"engine/": "../engine/",
 		"asset/": "../engine/asset/",
 		"mazeobject/": "../engine/mazeobject/",
 		"mazescript/": "../engine/mazescript/",
 		"shader/": "../engine/shader/",
 		"test/": "../engine/test/",
-		"scene/" : "../scene/",
+		"scene/": "../scene/"
 	}
 }
 </script>
 <body>
 <canvas id="canvas"></canvas>
 <script type="module">
-	import mazeEngine from "engine/mazeengine.js";
+	import MazeEngine from "engine/mazeengine.js";
 	import Maze from "mazeobject/maze.js";
 	import TestScene from "scene/singleplayertest1.js";
 	import * as THREE from '../three/Three.js';
 	window.THREE = THREE;
-
-	let maze = new mazeEngine();
+	let maze = new MazeEngine({
+		pathRoot: "../"
+	});
+	await maze.loadAssets();
 	maze.instantiate(TestScene);
+	maze.start(document.getElementById("canvas"));
 </script>

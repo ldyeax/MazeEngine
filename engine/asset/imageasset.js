@@ -6,8 +6,9 @@ const textureLoader = new THREE.TextureLoader();
 export default class ImageAsset extends Asset {
 	constructor(mazeEngine, key) {
 		super(mazeEngine, key);
-		let url = this.url = this.mazeEngine.imageAssets[key];
+		let url = this.url = mazeEngine.resolvePath(mazeEngine.imageAssets[key]);
 		textureLoader.load(url, (texture) => {
+			// console.log("loaded texture from " + url);
 			this.texture = texture;
 
 			let geometry = new THREE.PlaneGeometry(1, 1);
