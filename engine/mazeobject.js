@@ -107,10 +107,11 @@ export default class MazeObject {
 
 	/**
 	 * @param {MazeScript} scriptClass 
+	 * @param {Object.<string, any>} args
 	 * @returns {MazeScript}
 	 */
-	addScript(scriptClass) {
-		let ret = new scriptClass(this);
+	addScript(scriptClass, args) {
+		let ret = new scriptClass(this, args);
 		this.scripts.push(ret);
 		return ret;
 	}
