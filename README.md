@@ -28,10 +28,12 @@ maze.start(document.getElementById("canvas"));
 
 # MazeObject
 Analogous to GameObject, but with its own update loops (like a default MonoBehaviour) but also used for "Scenes". See the scenes under "scene" for examples of this.
+
 ```javascript
 export default class TestScene1 extends MazeObject {
 	constructor(mazeEngine, args) {
 ```
+
 mazeEngine will be a reference to the mazeEngine that's instantiating it, and args can be anything you want, passed as the second argument to instantiate on MazeEngine.instantiate(Class, args). Examples of MazeObject are in the "mazeobject" folder.
 
 # MazeScript
@@ -45,15 +47,16 @@ player.addScript(HairJiggler, {bounciness: 100});
 Analogous to Unity, but with MazeObject having the same update loop as well as MazeScript.
 
 In order every game loop:
-all MazeObject.preUpdate
-all MazeScript.preUpdate
-all MazeObject.update - note that the base MazeObject.update contains ```this.lastPosition = this.position.clone();```
-all MazeScript.update
-all MazeObject.update2
-all MazeScript.update2
-all MazeObject.root position/scale/rotation updated according to the properties on the MazeObject
-all MazeObject.lateUpdate
-all MazeScript.lateUpdate
+
+1. all MazeObject.preUpdate
+2. all MazeScript.preUpdate
+3. all MazeObject.update - note that the base MazeObject.update contains ```this.lastPosition = this.position.clone();```
+4. all MazeScript.update
+5. all MazeObject.update2
+6. all MazeScript.update2
+7. all MazeObject.root position/scale/rotation updated according to the properties on the MazeObject
+8. all MazeObject.lateUpdate
+9. all MazeScript.lateUpdate
 
 Contributors:
 [jimm](https://github.com/ldyeax)
