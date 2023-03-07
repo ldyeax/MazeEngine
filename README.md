@@ -4,9 +4,9 @@ Javascript and THREE.js game engine made for Windows 95-style maze games. Loosel
 MazeEngine is constructed with an optional pathRoot as an argument. pathRoot must be such that pathRoot + /engine points to the "engine" folder. It defaults to "."
 
 ```javascript
-	let maze = new MazeEngine({
-		pathRoot: "../"
-	});
+let maze = new MazeEngine({
+	pathRoot: "../"
+});
 ```
 
 Wait for assets to load:
@@ -27,7 +27,7 @@ maze.start(document.getElementById("canvas"));
 ```
 
 # MazeObject
-Analogous to GameObject, but also used for "Scenes". See the scenes under "scene" for examples of this.
+Analogous to GameObject, but with its own update loops (like a default MonoBehaviour) but also used for "Scenes". See the scenes under "scene" for examples of this.
 ```javascript
 export default class TestScene1 extends MazeObject {
 	constructor(mazeEngine, args) {
@@ -40,6 +40,20 @@ Analogous to MonoBehaviour. A script that can be added to any MazeObject. args c
 player = mazeEngine.instantiate(Player, {height: 1.75});
 player.addScript(HairJiggler, {bounciness: 100});
 ```
+
+# Update Loop
+Analogous to Unity, but with MazeObject having the same update loop as well as MazeScript.
+
+In order every game loop:
+all MazeObject.preUpdate
+all MazeScript.preUpdate
+all MazeObject.update - note that the base MazeObject.update contains ```this.lastPosition = this.position.clone();```
+all MazeScript.update
+all MazeObject.update2
+all MazeScript.update2
+all MazeObject.root position/scale/rotation updated according to the properties on the MazeObject
+all MazeObject.lateUpdate
+all MazeScript.lateUpdate
 
 Contributors:
 [jimm](https://github.com/ldyeax)
