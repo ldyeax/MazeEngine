@@ -233,10 +233,12 @@ export default class MazeEngine {
 		};
 
 		for (let key of Object.keys(defaultImageAssets)) {
-			this.assets[key] = new ImageAsset(this, key);
+			let relativeUrl = defaultImageAssets[key];
+			this.assets[key] = new ImageAsset(this.resolvePath(relativeUrl));
 		}
 		for (let key of Object.keys(defaultGltfAssets)) {
-			this.assets[key] = new GLTFAsset(this, key);
+			let relativeUrl = defaultGltfAssets[key];
+			this.assets[key] = new GLTFAsset(this.resolvePath(relativeUrl));
 		}
 	}
 	// #endregion

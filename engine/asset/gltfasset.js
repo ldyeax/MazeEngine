@@ -86,6 +86,7 @@ export default class GLTFAsset extends Asset {
 	 * @param {string} absoluteUrl
 	 */
 	constructor(absoluteUrl) {
+		super();
 		gltfLoader.load(absoluteUrl, (gltf) => {
 			this.gltf = gltf;
 			super.loaded();
