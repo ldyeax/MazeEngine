@@ -8,12 +8,18 @@ const ADDWALL_RIGHT = 1;
 const ADDWALL_UP = 2;
 const ADDWALL_DOWN = 3;
 
+/**
+ * @typedef {import("engine/mazeengine.js").default} MazeEngine
+ */
 export default class Walls extends MazeObject {
 	/**
 	 * @type {THREE.Mesh[]}
 	 */
 	wallMeshes = [];
 
+	/**
+	 * @param {MazeEngine} mazeEngine 
+	 */
 	constructor(mazeEngine) {
 		super(mazeEngine);
 		let SIDE = mazeEngine.SIDE;
@@ -32,7 +38,7 @@ export default class Walls extends MazeObject {
 		function addWall(d, x, y) {
 			// if (d != ADDWALL_UP) return;
 
-			let wallMesh = mazeEngine.imageAssets.wall.getRoot();
+			let wallMesh = mazeEngine.assets.wall.getRoot();
 			
 			walls.wallMeshes.push(wallMesh);
 

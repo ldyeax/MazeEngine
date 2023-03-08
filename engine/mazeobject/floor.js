@@ -26,7 +26,7 @@ export default class Floor extends MazeObject {
 		// #region floor cell generation
 		for (let y = 0; y < height; y++) {
 			for (let x = 0; x < width; x++) {
-				let floorCell = mazeEngine.imageAssets.floor.getRoot();
+				let floorCell = mazeEngine.assets.floor.getRoot();
 				
 				floorCell.userData.cell = mazeEngine.cells[y][x];
 

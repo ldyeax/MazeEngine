@@ -5,6 +5,9 @@ import * as THREE from "three";
 import CellAlphaReceiver from "mazescript/cellalphareceiver.js";
 
 let mazeEngine = null;
+/**
+ * @typedef {import("engine/mazeengine.js").default} MazeEngine
+ */
 export default class MarbleTest extends MazeObject {
 	/**
 	 * @type {Object.<string, number>}
@@ -29,7 +32,7 @@ export default class MarbleTest extends MazeObject {
 		super(mazeEngine, args);
 		this.name = "MarbleTest" + this.id;
 
-		this.root = mazeEngine.gltfAssets.marbletest.getRoot();
+		this.root = mazeEngine.assets.marbletest.getRoot();
 
 		let spin = this.addScript(Spin);
 		spin.speed = x + y + 1;

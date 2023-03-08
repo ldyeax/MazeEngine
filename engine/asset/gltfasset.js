@@ -11,6 +11,17 @@ import misc from "engine/misc.js";
 const gltfLoader = new GLTFLoader();
 
 /**
+ * Asset implementation for a GLTF file.  
+ * It supports a three_props property on any object in the GLTF scene.  
+ * This must be a JSON string. Properties will be applied to the object and any children.  
+ * For a child to have a different property it must have its own definition of that property to overwrite it.  
+ * three_props supports the following properties:  
+ * - transparent: boolean, enables transparent rendering
+ * - receiveShadow: boolean, enables receiving shadows
+ * - castShadow: boolean, enables casting shadows  
+ * Remember to enable custom data attributes when exporting the GLTF from Blender.  
+ *   
+ * Both GLTF and GLB are supported.
  * @typedef {import("engine/mazeengine.js").default} MazeEngine
  */
 export default class GLTFAsset extends Asset {
@@ -62,6 +73,9 @@ export default class GLTFAsset extends Asset {
 		}
 	}
 
+	/**
+	 * @returns {THREE.Scene} SkeletonUtils.clone(this.gltf.scene), with properties set 
+	 */
 	getRoot() {
 		let ret = SkeletonUtils.clone(this.gltf.scene);
 		GLTFAsset.setPropertiesAndCloneMaterials(ret);
@@ -69,16 +83,12 @@ export default class GLTFAsset extends Asset {
 	}
 
 	/**
-	 * @param {MazeEngine} mazeEngine 
-	 * @param {string} key 
+	 * @param {string} absoluteUrl
 	 */
-	constructor(mazeEngine, key) {
-		super(mazeEngine, key);
-		this.url = mazeEngine.resolvePath(mazeEngine.gltfAssets[key]);
-		gltfLoader.load(this.url, (gltf) => {
+	constructor(absoluteUrl) {
+		gltfLoader.load(absoluteUrl, (gltf) => {
 			this.gltf = gltf;
 			super.loaded();
-			this.mazeEngine.gltfAssets[key] = this;
 		});
 	}
 };

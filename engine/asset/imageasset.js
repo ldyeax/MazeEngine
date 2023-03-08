@@ -4,10 +4,12 @@ import * as THREE from "three";
 const textureLoader = new THREE.TextureLoader();
 
 export default class ImageAsset extends Asset {
-	constructor(mazeEngine, key) {
-		super(mazeEngine, key);
-		let url = this.url = mazeEngine.resolvePath(mazeEngine.imageAssets[key]);
-		textureLoader.load(url, (texture) => {
+	/**
+	 * @param {string} absoluteUrl Absolute path to resource
+	 */
+	constructor(absoluteUrl) {
+		super();
+		textureLoader.load(absoluteUrl, (texture) => {
 			// console.log("loaded texture from " + url);
 			this.texture = texture;
 
@@ -61,7 +63,6 @@ export default class ImageAsset extends Asset {
 			this.root.castShadow = true;
 
 			super.loaded();
-			this.mazeEngine.imageAssets[key] = this;
 		});
 	}
 

@@ -3,7 +3,13 @@ import * as THREE from "three";
 
 import FourCornerCellLightReceiver from "engine/mazescript/four_corner_cell_light_receiver.js";
 
+/**
+ * @typedef {import("engine/mazeengine.js").default} MazeEngine
+ */
 export default class Ceiling extends MazeObject {
+	/**
+	 * @param {MazeEngine} mazeEngine 
+	 */
 	constructor(mazeEngine) {
 		super(mazeEngine);
 
@@ -19,7 +25,7 @@ export default class Ceiling extends MazeObject {
 		// #region ceiling cell generation
 		for (let y = 0; y < height; y++) {
 			for (let x = 0; x < width; x++) {
-				let ceilingCell = mazeEngine.imageAssets.ceiling.getRoot();;
+				let ceilingCell = mazeEngine.assets.ceiling.getRoot();;
 
 				ceilingCell.userData.cell = mazeEngine.cells[y][x];
 

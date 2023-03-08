@@ -21,7 +21,6 @@ const KEYSTATE_HELD = 2;
 const KEYSTATE_UP = 3;
 const KEYSTATE_NONE = 0;
 
-
 let noclip = window.location.search.indexOf("noclip") != -1;
 
 /**
@@ -31,10 +30,37 @@ let noclip = window.location.search.indexOf("noclip") != -1;
  * @typedef {import("mazeobject/player.js").default} Player
  */
 export default class MazeEngine {
+	// #region Options
+	/**
+	 * @type {Object.<string, any>}
+	 */
+	options = {
+		pathRoot: ".",
+		initDefaultAssets: true,
+		enableWindowDebugAssigments: true
+	};
+
 	/**
 	 * @type {string}
 	 */
-	pathRoot = ".";
+	get pathRoot() {
+		return this.options.pathRoot;
+	}
+	/**
+	 * @type {boolean}
+	 */
+	get initDefaultAssets() {
+		return this.options.initDefaultAssets;
+	}
+	/**
+	 * @type {boolean}
+	 * @description Assign various values to the window object for debugging
+	 */
+	get enableWindowDebugAssigments() {
+		return this.options.enableWindowDebugAssigments; 
+	}
+	// #endregion
+	
 	/**
 	 * @param {string} path Path relative to pathRoot
 	 * @returns relative path resolved to absolute path with pathRoot
@@ -119,20 +145,34 @@ export default class MazeEngine {
 	}
 
 	// #endregion
-	
-	// #region constructor
-	constructor(options) {
-		if (options.pathRoot) {
-			this.pathRoot = options.pathRoot;
-		}
 
+	// #region constructor
+	/** Options:
+	 *  - **pathRoot**:  
+	 * 	The root where the "engine" folder is located inside.  
+	 * 	e.g. if the engine folder is located at "/public/engine", then the pathRoot is "/public".  
+	 *  Default: "."  
+	 *  - **initDefaultAssets**:  
+	 * 	Whether to add the default assets located in the "assets" folder automatically.  
+	 *  Default: true  
+	 *  - **enableWindowDebugAssigments**:  
+	 * 	Whether to assign various values to the window object for debugging.  
+	 *  Default: true  
+	 */
+	constructor(options) {
 		this.SIDE = SIDE;
 		this.HALF_SIDE = HALF_SIDE;
 		this.INV_SIDE = INV_SIDE;
 		this.INV_SIDE_NEGATIVE = INV_SIDE_NEGATIVE;
 
-		this.#initAssets();
-		window.me = this;
+		this.options = Object.assign(this.options, options);
+
+		if (this.initDefaultAssets) {
+			this.#initDefaultAssets();
+		}
+		if (this.enableWindowDebugAssigments) {
+			window.me = this;
+		}
 	}
 	// #endregion
 
@@ -155,25 +195,9 @@ export default class MazeEngine {
 	 */
 	assetsLoaded = false;
 	/**
-	 * @type {ImageAsset[]}
+	 * @type {Object.<string, Asset>}
 	 */
-	assets = [];
-	/**
-	 * @type {Object.<string, GLTFAsset>}
-	 */
-	gltfAssets = {
-		N64: "assets/n64/scene.gltf",
-		marbletest: "assets/marbletest2.gltf",
-	};
-	/**
-	 * @type {Object.<string, THREE.Mesh>}
-	 */
-	imageAssets = {
-		ceiling: "assets/img/ceiling.png",
-		floor: "assets/img/floor.png",
-		wall: "assets/img/wall.png",
-		globe: "assets/img/globe.png",
-		ponycloud: "assets/img/ponycloud.png",
+	assets = {
 	};
 
 	loadAssets() {
@@ -181,38 +205,38 @@ export default class MazeEngine {
 		return new Promise((resolve) => {
 			let interval = setInterval(() => {
 				let allLoaded = true;
-				// console.log("==loadAssets==");
-				for (let asset of mazeEngine.assets) {
+				for (let asset of Object.values(mazeEngine.assets)) {
 					if (!asset.loaded) {
-						//console.log("Not loaded: " + asset.key);
 						allLoaded = false;
-					} else {
-						//console.log("Is loaded: " + asset.key);
 					}
 				}
-				//console.log("=/loadAssets/=");
 				if (allLoaded) {
-					//console.log("Resolving");
 					clearInterval(interval);
 					mazeEngine.assetsLoaded = true;
 					resolve();
 				}
-			}, 100);
+			}, 1);
 		});
 	};
 
-	#initAssets() {
-		let floorAsset = window.floorAsset = new ImageAsset(this, 'floor');
-		this.assets.push(floorAsset);
-	
-		let ceilingAsset = window.ceilingAsset = new ImageAsset(this, 'ceiling');
-		this.assets.push(ceilingAsset);
-	
-		let wallAsset = window.wallAsset = new ImageAsset(this, 'wall');
-		this.assets.push(wallAsset);
+	#initDefaultAssets() {
+		let defaultImageAssets = {
+			ceiling: "assets/img/ceiling.png",
+			floor: "assets/img/floor.png",
+			wall: "assets/img/wall.png",
+			globe: "assets/img/globe.png",
+			ponycloud: "assets/img/ponycloud.png",
+		};
+		let defaultGltfAssets = {
+			N64: "assets/n64/scene.gltf",
+			marbletest: "assets/marbletest2.gltf",
+		};
 
-		for (let key of Object.keys(this.gltfAssets)) {
-			this.assets.push(new GLTFAsset(this, key));
+		for (let key of Object.keys(defaultImageAssets)) {
+			this.assets[key] = new ImageAsset(this, key);
+		}
+		for (let key of Object.keys(defaultGltfAssets)) {
+			this.assets[key] = new GLTFAsset(this, key);
 		}
 	}
 	// #endregion
