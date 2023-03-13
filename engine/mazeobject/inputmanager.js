@@ -54,6 +54,48 @@ export default class InputManager extends MazeObject {
 				}
 			}
 		});
+		function touchInput(e) {
+			let touch = e.touches[0];
+			let x = touch.clientX;
+			let y = touch.clientY;
+			let centerX = window.innerWidth / 2;
+			let centerY = window.innerHeight / 2;
+			let degrees = Math.atan2(centerY - y, x - centerX) * 180 / Math.PI;
+			if (degrees < 360) {
+				degrees += 360;
+			}
+			if (degrees >= 360) {
+				degrees -= 360;
+			}
+			let direction = "KeyD";
+			if (degrees >= 45 && degrees < 135) {
+				direction = "KeyW";
+			} else if (degrees >= 135 && degrees < 225) {
+				direction = "KeyA";
+			} else if (degrees >= 225 && degrees < 315) {
+				direction = "KeyS";
+			}
+			let keydownEvent = new KeyboardEvent("keydown", {
+				code: direction,
+			});
+			window.dispatchEvent(keydownEvent);
+		}
+		window.addEventListener("touchstart", function (e) {
+			touchInput(e);
+		});
+		function clearAll() {
+			for (let actionName in KEY_ACTIONS) {
+				let actionId = KEY_ACTIONS[actionName];
+				keyStates[actionId] = KEYSTATE_UP;
+			}
+		}
+		window.addEventListener("touchmove", function (e) {
+			clearAll();
+			touchInput(e);
+		});
+		window.addEventListener("touchend", function (e) {
+			clearAll();
+		});
 	}
 	// sets key states based on current (set by addEventListeners above) and last states
 	update() {
