@@ -1,6 +1,7 @@
 import MazeObject from "engine/mazeobject.js";
 import * as THREE from "three";
 import FourCornerCellLightReceiver from "engine/mazescript/four_corner_cell_light_receiver.js";
+import CellLightReceiverSingle from "engine/mazescript/celllightreceiver_single.js";
 /**
  * @typedef {import("engine/mazeengine.js").default} MazeEngine
  */
@@ -39,6 +40,10 @@ export default class Floor extends MazeObject {
 		}
 		// #endregion
 
-		this.cellLightReceiver = this.addScript(FourCornerCellLightReceiver);
+		if (mazeEngine.assets.floor.shader.name == "fourcornerlittexture") {
+			this.cellLightReceiver = this.addScript(FourCornerCellLightReceiver);
+		} else if (mazeEngine.assets.floor.shader.name == "littexture1") {
+			this.cellLightReceiver = this.addScript(CellLightReceiverSingle);
+		}
 	}
 }

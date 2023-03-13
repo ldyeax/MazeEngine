@@ -2,6 +2,7 @@ import MazeObject from "engine/mazeobject.js";
 import * as THREE from "three";
 
 import FourCornerCellLightReceiver from "engine/mazescript/four_corner_cell_light_receiver.js";
+import CellLightReceiverSingle from "engine/mazescript/celllightreceiver_single.js";
 
 const ADDWALL_LEFT = 0;
 const ADDWALL_RIGHT = 1;
@@ -130,7 +131,11 @@ export default class Walls extends MazeObject {
 
 		// #endregion
 
-		this.cellLightReceiver = this.addScript(FourCornerCellLightReceiver);
+		if (mazeEngine.assets.ceiling.shader.name == "fourcornerlittexture") {
+			this.cellLightReceiver = this.addScript(FourCornerCellLightReceiver);
+		} else if (mazeEngine.assets.ceiling.shader.name == "littexture1") {
+			this.cellLightReceiver = this.addScript(CellLightReceiverSingle);
+		}
 	}
 	lateUpdate() {
 		this.position.y = this.mazeEngine.SIDE * 0.5 * this.mazeEngine.globalYScale;

@@ -232,5 +232,9 @@ export default function generateMaze(width, height, seed) {
 		}
 	}
 
-	return {ret, seed: seedGenerator, asciiArt: mazeAsciiArt(ret) };
+	return {
+		cells: ret, 
+		seed: seedGenerator, 
+		asciiArt: mazeAsciiArt(ret) 
+	};
 };

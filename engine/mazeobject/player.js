@@ -47,7 +47,7 @@ export default class Player extends MazeObject {
 
 		this.currentPosition = new THREE.Vector2(0, 0);
 
-		this.position.x = mazeEngine.SIDE * 0.5;
+		this.position.x = mazeEngine.width / 2 * mazeEngine.SIDE + mazeEngine.SIDE * 0.5;
 		this.position.z = mazeEngine.SIDE * -0.5;
 		this.position.y = 0;
 		this.lastPosition = this.position.clone();

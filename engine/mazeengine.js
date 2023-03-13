@@ -173,6 +173,13 @@ export default class MazeEngine {
 		if (this.enableWindowDebugAssigments) {
 			window.me = this;
 		}
+
+		if (options.progressFunction) {
+			this.progressFunction = options.progressFunction;
+		}
+		if (options.loadingFinishedFunction) {
+			this.loadingFinishedFunction = options.loadingFinishedFunction;
+		}
 	}
 	// #endregion
 
@@ -200,20 +207,39 @@ export default class MazeEngine {
 	assets = {
 	};
 
+	/**
+	 *  @type {function} function(loadedCount, totalCount)
+	 */
+	progressFunction = null;
+	/**
+	 * @type {function}
+	 */
+	loadingFinishedFunction = null;
+
 	loadAssets() {
 		let mazeEngine = this;
 		return new Promise((resolve) => {
 			let interval = setInterval(() => {
 				let allLoaded = true;
-				for (let asset of Object.values(mazeEngine.assets)) {
+				let values = Object.values(mazeEngine.assets);
+				mazeEngine.loadedCount = 0;
+				for (let asset of values) {
 					if (!asset.loaded) {
 						allLoaded = false;
+					} else {
+						mazeEngine.loadedCount++;
 					}
+				}
+				if (mazeEngine.progressFunction) {
+					mazeEngine.progressFunction(mazeEngine.loadedCount, values.length);
 				}
 				if (allLoaded) {
 					clearInterval(interval);
 					mazeEngine.assetsLoaded = true;
 					resolve();
+					if (mazeEngine.loadingFinishedFunction) {
+						mazeEngine.loadingFinishedFunction();
+					}
 				}
 			}, 1);
 		});

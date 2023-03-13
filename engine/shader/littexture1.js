@@ -28,5 +28,6 @@ void main() {
 
 export default {
 	vertex: vertex, 
-	fragment: fragment
+	fragment: fragment,
+	name: "littexture1"
 }
