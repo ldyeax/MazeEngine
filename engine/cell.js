@@ -1,3 +1,5 @@
+import * as THREE from 'three';
+
 export default class Cell {
 	/**
 	 * @type {boolean}
@@ -37,6 +39,7 @@ export default class Cell {
 	 */
 	y = 0;
 
+	// #region Connected Cells
 	/**
 	 * @type {Cell}
 	 * @description the cell connected above, if any
@@ -57,6 +60,12 @@ export default class Cell {
 	 * @description the cell connected to the right, if any
 	 */
 	rightOf = null;
+	/**
+	 * @type {Cell}
+	 * @description The "parent" cell i.e. the one that created this one
+	 */
+	parent = null;
+	// #endregion
 
 	// #region Lighting
 	/**
@@ -109,18 +118,33 @@ export default class Cell {
 	}
 
 	tryGetConnectedCell(x2, y2) {
+		x2 = Math.round(x2);
+		y2 = Math.round(y2);
+		//console.log(`trying to connect ${this.x},${this.y} to ${x2},${y2}`);
 		if (x2 == this.x && y2 == this.y + 1) {
-				return this.above;
+			//console.log(`got above: ${this.above}`);
+			return this.above;
 		}
 		if (x2 == this.x && y2 == this.y - 1) {
-				return this.below;
+			//console.log(`got below: ${this.below}`);
+			return this.below;
 		}
 		if (x2 == this.x - 1 && y2 == this.y) {
-				return this.leftOf;
+			//console.log(`got leftOf: ${this.leftOf}`);
+			return this.leftOf;
 		}
 		if (x2 == this.x + 1 && y2 == this.y) {
-				return this.rightOf;
+			//console.log(`got rightOf: ${this.rightOf}`);
+			return this.rightOf;
 		}
+		console.log("not within +");
 		return null;
+	}
+
+	/**
+	 * @returns {THREE.Vector2}
+	 */
+	gridPos() {
+		return new THREE.Vector2(this.x, this.y);
 	}
 };

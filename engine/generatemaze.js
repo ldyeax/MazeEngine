@@ -50,8 +50,8 @@ function mazeAsciiArt(cells) {
  */
 export default function generateMaze(width, height, seed) {
 	const seedGenerator = [];
-	width = parseInt(Math.abs(width));
-	height = parseInt(Math.abs(height));
+	width = Math.round(Math.abs(width));
+	height = Math.round(Math.abs(height));
 	if (isNaN(width) || isNaN(height) || width < 1 || height < 1) {
 		console.error(`Invalid dimensions passed to generateMaze: ${width}, ${height}`);
 		width = 1;
@@ -125,6 +125,7 @@ export default function generateMaze(width, height, seed) {
 				cell2.right = false;
 				cell1.left = false;
 			}
+			cell2.parent = cell1;
 			return true;
 		}
 		// Dead end: cell with no surrounding secluded cells

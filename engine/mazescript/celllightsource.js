@@ -41,7 +41,15 @@ export default class CellLightSource extends MazeScript {
 
 			let first = lastDirection == CELL_START;
 
-			let cell = mazeEngine.cells[y][x];
+			let cell = null; 
+			try {
+				cell = mazeEngine.cells[y][x];
+			} catch (_) {
+				return;
+			}
+			if (!cell) {
+				return;
+			}
 			cell.lightMapValue = Math.max(cell.lightMapValue, value);
 
 			if (lastDirection != CELL_DOWN && !cell.up) {

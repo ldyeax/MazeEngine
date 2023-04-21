@@ -127,4 +127,11 @@ export default class MazeObject {
 	destroy() {
 		destroyed = true;
 	}
+	setPositionFromGridPos_partial(vec2) {
+		this.setPositionFromGridPos_partial_XY(vec2.x, vec2.y);
+	}
+	setPositionFromGridPos_partial_XY(x, y) {
+		this.position.x = x * this.mazeEngine.SIDE + this.mazeEngine.HALF_SIDE;
+		this.position.z = y * this.mazeEngine.SIDE_NEGATIVE + this.mazeEngine.HALF_SIDE_NEGATIVE;
+	}
 }

@@ -83,7 +83,15 @@ export default class MazeEngine {
 	/**
 	 * @type {number}
 	 */
+	SIDE_NEGATIVE = 0;
+	/**
+	 * @type {number}
+	 */
 	HALF_SIDE = 0;
+	/**
+	 * @type {number}
+	 */
+	HALF_SIDE_NEGATIVE = 0;
 	/**
 	 * @type {number}
 	 */
@@ -161,7 +169,9 @@ export default class MazeEngine {
 	 */
 	constructor(options) {
 		this.SIDE = SIDE;
+		this.SIDE_NEGATIVE = -SIDE;
 		this.HALF_SIDE = HALF_SIDE;
+		this.HALF_SIDE_NEGATIVE = -HALF_SIDE;
 		this.INV_SIDE = INV_SIDE;
 		this.INV_SIDE_NEGATIVE = INV_SIDE_NEGATIVE;
 
@@ -281,9 +291,13 @@ export default class MazeEngine {
 		let xDiv = position.x * INV_SIDE;
 		let cell_x = Math.floor(position.x / SIDE);
 		let xPortion = xDiv - cell_x;
-	
-		let cell = this.cells[cell_y][cell_x];
-		if (typeof cell == 'undefined') {
+
+		let cell = null;
+		try {
+			cell = this.cells[cell_y][cell_x];
+		} catch (_) {};
+
+		if (!cell) {
 			return false;
 		}
 	
@@ -318,7 +332,7 @@ export default class MazeEngine {
 
 	updateCanvasSize() {
 		let canvasWidth = 640;
-		let canvasHeight = parseInt(canvasWidth * window.innerHeight / window.innerWidth);
+		let canvasHeight = Math.round(canvasWidth * window.innerHeight / window.innerWidth);
 	
 		if (this.renderer) {
 			this.renderer.setSize(canvasWidth, canvasHeight, false);
@@ -491,4 +505,101 @@ export default class MazeEngine {
 
 		this._update();
 	}
+
+	// #region pathfinding
+	/**
+	 * @param {Cell} start 
+	 * @param {Cell} end 
+	 * @param {number} marker 
+	 * @returns {Cell[]} path
+	 */
+	#findPath_recurse(start, end, marker) {
+		// console.log("#findPath_recurse");
+		if (start.marker == marker) {
+			// console.log("already visited");
+			return null;
+		}
+		if (start == end) {
+			// console.log("found end");
+			return [start.gridPos()];
+		}
+		start.marker = marker;
+		let appendum = null;
+		if (start.above) {
+			// console.log("going above");
+			appendum = this.#findPath_recurse(start.above, end, marker);
+		}
+		if (appendum == null && start.below) {
+			// console.log("going below");
+			appendum = this.#findPath_recurse(start.below, end, marker);
+		}
+		if (appendum == null && start.leftOf) {
+			// console.log("going left");
+			appendum = this.#findPath_recurse(start.leftOf, end, marker);
+		}
+		if (appendum == null && start.rightOf) {
+			// console.log("going right");
+			appendum = this.#findPath_recurse(start.rightOf, end, marker);
+		}
+		if (appendum == null) {
+			// console.log("no path found");
+			return null;
+		}
+		appendum.unshift(start.gridPos());
+		// console.log("found path:");
+		// console.log(appendum);
+		return appendum;
+	}
+	/**
+	 * @param {THREE.Vector2} vec2 
+	 */
+	getCellFromGridPos(gridPos) {
+		//console.log(`getCellFromGridPos(${gridPos.x}, ${gridPos.y})`);
+		return this.cells[gridPos.y][gridPos.x];
+	}
+	/**
+	 * 
+	 * @param {THREE.Vector2} start 
+	 * @param {THREE.Vector2} end 
+	 * @returns 
+	 */
+	findPath(start, end) {
+		//console.log("getting start cell");
+		let startCell = this.getCellFromGridPos(start);
+		//console.log("getting end cell");
+		let endCell = this.getCellFromGridPos(end);
+		return this.#findPath_recurse(startCell, endCell, this.#lastUpdateTime);
+	}
+	// #endregion
+
+	// #region debug utility 
+	/**
+	 * North, South, East, or West from y rotation
+	 * @param {number} yRot 
+	 * @returns {string}
+	 */
+	dbg_getCardinalNameFromYRot(yRot) {
+		while (yRot < 0) {
+			yRot += 2 * Math.PI;
+		}
+		while (yRot > 2 * Math.PI) {
+			yRot -= 2 * Math.PI;
+		}
+		if (yRot < Math.PI * 0.25 || yRot > Math.PI * 1.75) {
+			return "North";
+		}
+		if (yRot < Math.PI * 0.75) {
+			return "West";
+		}
+		if (yRot < Math.PI * 1.25) {
+			return "South";
+		}
+		return "East";
+	}
+	dbg_setPlayerRot(yRot) {
+		this.player.rotation.y = yRot;
+		console.log(this.dbg_getCardinalNameFromYRot(yRot));
+	}
+	// #endregion
+
 }
